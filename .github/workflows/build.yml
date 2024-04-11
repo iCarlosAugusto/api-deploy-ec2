@@ -32,3 +32,16 @@ jobs:
             
             - name: Push image to Dockerhub
               run: docker push augustod3v/api-ec2 
+            
+    build-on-aws:
+        needs: build
+        runs-on: self-hosted
+        steps: 
+            - name: Pull Image from Docker
+              run: sudo docker pull augustod3v/api-ec2:latest
+        
+            - name: Remove docker container
+              run: docker rm -f api-ec2
+        
+            - name: Run Docker container
+              run: docker run -d -p 3000:3000 --name api-ec2 augustod3v/api-ec2
